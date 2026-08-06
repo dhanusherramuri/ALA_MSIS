@@ -1,13 +1,16 @@
 
+def ho_add (x) :
+    return lambda y: x+y
 
-def add(x, y):
-    return x+y
+f = ho_add(10)
+print(f(20))
+inc = ho_add(1)
+print(inc (99))
 
-def next_nop(x , y):
-    if x < 10 :
-        print( "X is less than 10" )
-    else :
-        g(x , y)
+def ho_add2(x):
+    def _add_(y):
+        return x+y
+    return _add_
 
-print( next_nop(8, 20))
-print(add(4,5))
+f2= ho_add2(10)
+print(f2(20))
