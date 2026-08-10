@@ -23,7 +23,8 @@ assert a == b
 l1 = [10,20,30]
 l2 = [10,20,30]
 assert l1 == l2
-print(a is b) # 'is' keyword is used to check if the compared values are identical or not while comparing and that is the reason it doesnt work for list but works only for integers.
+print(a is b) # 'is' keyword is used to check if the compared values are identical or not while comparing 
+              # and that is the reason it doesnt work for list but works only for integers.
 print (l1 is l2)
 
 l3 = l1 #l3 is just pointing to l1 which means if a value is changed in l3, then that corresponding value in l1 changes too.
