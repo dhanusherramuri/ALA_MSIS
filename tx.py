@@ -5,6 +5,7 @@ class UpiTx():
         self.tx_id = ?
         self.sender = sender
         self.receiver = receiver
+        self.amount = amount
         pass
 
 class UpiPaymentTx(UpiTx):
@@ -14,5 +15,6 @@ class UpiPaymentTx(UpiTx):
 
 class UpiReceiptTx(UpiTx):
     def __init__(self,sender_handle, receiver_handle, amount):
+        #pass the responsibility to 'UpiTx'
         pass
         
