@@ -61,3 +61,20 @@ print(isinstance(edrk_upi_id_new, UpiId))
 # print("Stranger : ", stranger)
 # print(edrk_upi_id is stranger)
 
+#Assignment - Create a Dictionary of Upi Handle & 'Key' must be a phone number
+
+def create_handle(uid : str, bank_id : str):
+    return (uid, bank_id)
+
+def read_id(upi_handle):
+    return upi_handle[0]
+
+def read_bank_id(upi_handle):
+    return upi_handle[1]
+
+upi_handle = create_handle("8019625339","oksbi")
+# uh = ("8019","HDFC")
+print("\n"+read_id(upi_handle))
+print(read_bank_id(upi_handle))
+
+# assert read_id(uh) == "8019"
