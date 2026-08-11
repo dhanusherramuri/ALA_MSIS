@@ -13,7 +13,7 @@ class UpiTx():
         self.tx_id = f"T{txntime}{utr}"
         self.sender = sender
         self.receiver = receiver
-        self.amount = amount
+        self.amount = int(amount)
         # pass
 
 
@@ -24,8 +24,16 @@ class UpiPaymentTx(UpiTx):
 
     def pay(self):
         response = UpiTxResponse()
-        response.status = "OK"
+        if self.amount > 15000:
+            response.status = "FAILED"
+            response.reason = "Transaction limit exceeded (Max ₹15,000)"
+        else:
+            response.status = "OK"
+            response.reason = "Success"
+
         return response
+        # response.status = "OK"
+        # return response
         # pass
 
 class UpiReceiptTx(UpiTx):
@@ -44,7 +52,17 @@ class UpiTxResponse :
         tx = UpiPaymentTx(sender, receiver, amount)
         res = tx.pay() #res :UpiTxResponse
         assert res.status == "OK" or res.status == "FAILED"
-        print(f"[SUCCESS] TxID: {tx.tx_id} | From: {tx.sender} -> To: {tx.receiver} | Amt: ₹{tx.amount}")
+        if res.status == "OK":
+            print(
+                f"[SUCCESS] TxID: {tx.tx_id} | From: {tx.sender} -> To: {tx.receiver} | Amt: ₹{tx.amount}"
+            )
+        else:
+            print(
+                f"[FAILED]  TxID: {tx.tx_id} | From: {tx.sender} -> To: {tx.receiver} | Amt: ₹{tx.amount} |\nReason: {res.reason}"
+            )
+
+        return res
+        # print(f"[SUCCESS] TxID: {tx.tx_id} | From: {tx.sender} -> To: {tx.receiver} | Amt: ₹{tx.amount}")
 
 
 # base_tx = UpiTx("4444@oksbi","8251@okhdfc","10000")
