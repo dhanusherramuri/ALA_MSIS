@@ -62,13 +62,6 @@ class UpiTxResponse :
             )
 
         return res
-        # print(f"[SUCCESS] TxID: {tx.tx_id} | From: {tx.sender} -> To: {tx.receiver} | Amt: ₹{tx.amount}")
-
-
-# base_tx = UpiTx("4444@oksbi","8251@okhdfc","10000")
-# print(f"Base Tx ID: {base_tx.tx_id}")
-
-# UpiTxResponse.perform_payment_tx("4444@oksbi","8251@okhdfc","10000")
 
 transactions_to_run = [
     ("4444@oksbi", "8251@okhdfc", "10000"),
@@ -76,7 +69,6 @@ transactions_to_run = [
     ("dhanush@okpaytm", "edrk@oksbi", "25000"),
 ]
 
-# Process every item in the list
-print("--- Starting Batch Processing ---")
+print("********TRANSACTIONS********")
 for s, r, a in transactions_to_run:
     UpiTxResponse.perform_payment_tx(s, r, a)
