@@ -30,7 +30,7 @@ class Vec:
     def __rmul__(self, scalar: int | float) -> Self:
         if not isinstance(scalar, (int, float)):
             raise TypeError(f"Vector multiplication with invalid type: {type(scalar)}")
-        #
+        
         return Vec((round(x * scalar, 5) for x in self.elements))
 
     def __imul__(self, scalar: int | float) -> Self:
@@ -39,8 +39,7 @@ class Vec:
 
         self.elements = [round(val * scalar, 5) for val in self.elements]
         
-        return self
-    #   pass  
+        return self 
 
     def __repr__(self) -> str:
         return repr(self.elements)
@@ -78,17 +77,40 @@ class Vec:
     # return a vector of @n zeroes. precondition: @n > 0
     @staticmethod
     def zeros(n: int) -> Self:
-        raise RuntimeError("zeros unimpleented")
+        if not isinstance(n, int):
+            raise TypeError(f"Not of the type int")
+
+        if n < 0:
+            raise ValueError(f"Value less than 0")
+        else :
+            res = (0,) * n
+            return Vec((res))
+        # raise RuntimeError("zeros unimpleented")
 
     # return a vector of @n. precondition: @n > 0
     @staticmethod
     def ones(n: int) -> Self:
-        raise RuntimeError("ones unimpleented")
+        if not isinstance(n, int):
+                    raise TypeError(f"Not of the type int")
+        
+        if n < 0:
+                    raise ValueError(f"Value less than 0")
+        else :
+                    res = (1,) * n
+                    return Vec((res))
+        # raise RuntimeError("ones unimpleented")
 
     # return a vector of @n uniformly distributed numbers in [0, 1]. precondition: @n > 0
     @staticmethod
     def uniform(n: int) -> Self:
-        raise RuntimeError("random unimpleented")
+         if not isinstance(n, int):
+                            raise TypeError(f"Not of the type int")
+         if n < 0:
+            raise ValueError(f"Value less than 0")
+         else :
+            res = (0,1,) * n
+            return Vec((res))
+        # raise RuntimeError("random unimpleented")
 
     # Calculates the Euclidean norm (L2 norm) of the vector.
     # sqrt(e[0]^2 + e[1]^2 + e[2]^2 + ... + e[n-1]^2)
@@ -142,6 +164,10 @@ if __name__ == "__main__":
 
     v6 = Vec.__iadd__(v5,Vec((1,2,3,4)))
     print(v6)
+
+    print(Vec.zeros(5))
+    print(Vec.ones(5))
+    print(Vec.uniform(5))
     # v_test = Vec((5,6))
     # v5 = Vec.__imul__(v4,1)
     # print(v5)
