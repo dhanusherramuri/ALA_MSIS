@@ -1,5 +1,7 @@
 
 import sys
+import random
+import math
 from typing import Self
 
 
@@ -37,7 +39,8 @@ class Vec:
         if not isinstance(scalar, (int, float)):
             raise TypeError(f"Vector multiplication with invalid type: {type(scalar)}")
 
-        self.elements = [round(val * scalar, 5) for val in self.elements]
+        # self.elements = [round(val * scalar, 5) for val in self.elements]
+        self.elements = tuple(round(val * scalar, 5) for val in self.elements)
         
         return self 
 
@@ -57,7 +60,7 @@ class Vec:
         # raise RuntimeError("vec subtraction unimplemented")
 
     def __neg__(self) -> Self:
-        raise RuntimeError("vec negation unimplemented")
+        return Vec(-x for x in self.elements)
 
     def __radd__(self, other):
         if not isinstance(other, Vec):
@@ -69,8 +72,9 @@ class Vec:
     def __iadd__(self, other):
         if not isinstance(other, Vec):
             raise TypeError(f"Vector addition with invalid type: {type(other)}")
-
-        self.elements = [round(x+y,5) for x,y in zip(self.elements, other.elements)]
+        if len(self) != len(other):
+             raise TypeError(f"Not same Dimensions")
+        self.elements = tuple(round(x+y,5) for x,y in zip(self.elements, other.elements))
         return self
         # raise RuntimeError("vec _iadd_ unimplemented")
 
@@ -107,15 +111,15 @@ class Vec:
                             raise TypeError(f"Not of the type int")
          if n < 0:
             raise ValueError(f"Value less than 0")
-         else :
-            res = (0,1,) * n
-            return Vec((res))
+
+         return Vec(random.uniform(0, 1) for _ in range(n))
         # raise RuntimeError("random unimpleented")
 
     # Calculates the Euclidean norm (L2 norm) of the vector.
     # sqrt(e[0]^2 + e[1]^2 + e[2]^2 + ... + e[n-1]^2)
     def norm(self) -> float:
-        raise RuntimeError("norm unimpleented")
+        return round(math.sqrt(sum(x * x for x in self.elements)), 5)
+        # raise RuntimeError("norm unimpleented")
 
 
 """
@@ -145,29 +149,31 @@ if __name__ == "__main__":
     v3 = 2.2 * v1
     print("2.2 * 1 :",v3)
     ves1 = Vec((1,1,1,1))
-    v3 = Vec.__add__(v3,ves1)
+    v3 = v3+ves1
     print(f"V3 after adding 1 using add method : ",v3)
-    v3 = Vec.__rmul__(v3,5)
+    v3 = 5 * v3
     print(f"Vector Multiplication using rmul :",v3)
     # v3 *=  5
     # print(v3)
     # v3 = 1 + v3
     # print(v3)
-    v2 = Vec.__add__(v1,v3)
+    v2 = v1+v3
     print(f"Vector addition using Add function : ",v2)
 
     print(f"v3 : ",v3,"\nV2 :",v2)
-    v4 = Vec.__sub__(v3,v2)
+    v4 = v3 - v2
     print(f"Vector Subtraction using sub : ",v4)
-    v5= Vec.__imul__(v3,5)
-    print(v5)
+    v3 *= 5
+    print(v3)
 
-    v6 = Vec.__iadd__(v5,Vec((1,2,3,4)))
-    print(v6)
+    v4 += v3
+
+    print(v4)
 
     print(Vec.zeros(5))
     print(Vec.ones(5))
     print(Vec.uniform(5))
+    print(v4.norm())
     # v_test = Vec((5,6))
     # v5 = Vec.__imul__(v4,1)
     # print(v5)
