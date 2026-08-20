@@ -44,6 +44,16 @@ class Vec:
         
         return self 
 
+    def __mul__(self, other: Self) -> Self:
+        if not isinstance(other, Vec):
+            raise TypeError(f"Expected Vec: {type(other)}")
+
+        if len(self) != len(other):
+            raise TypeError("Vectors must be of the same dimensions")
+
+        return Vec(round(x * y, 5)for x, y in zip(self.elements, other.elements))
+
+
     def __repr__(self) -> str:
         return repr(self.elements)
 
@@ -127,11 +137,14 @@ class Vec:
 (2) Document each function.
 (3) Implement all unimplemented methods.
 (4) Create appropriate tests for this implementation, increasing the confidence about its correctness.
+
 (5) Test this implementation by importing the class in a sepatate python script.
 
 (6) Measure the performance of each of these functions on vectors of varying lengths.
     Try 2k to 64k dimension vectors and time the results.
     How would you do the measurements?
+    ******** COMPLETED TILL THIS POINT and the time has been used using the timeit function and the time that came has been divided by 10^6 so as to convert it into milliseconds***************
+
 (7) Measure the performance on your machine. Check it on colab.
 
 (8) use numpy and compare the performance.
