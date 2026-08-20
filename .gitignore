@@ -2,8 +2,9 @@ books/
 temp/
 .idea/
 .vscode/
-lectures/_minted/
 
+# Generated LaTeX files
+lectures/_minted/
 *.minted
 *.aux
 *.nav
@@ -15,8 +16,9 @@ lectures/_minted/
 *.swp
 *.tmp
 .DS_Store
-src/linalg/bin
-src/linalg/lib
-src/linalg/include
-src/linalg/share
 
+# Ignore these entire directories
+course/
+lectures/
+ref/
+src/linalg/
