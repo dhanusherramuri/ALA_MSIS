@@ -94,7 +94,7 @@ class Vec:
         if not isinstance(n, int):
             raise TypeError(f"Not of the type int")
 
-        if n < 0:
+        if n <= 0:
             raise ValueError(f"Value less than 0")
         else :
             res = (0,) * n
@@ -107,7 +107,7 @@ class Vec:
         if not isinstance(n, int):
                     raise TypeError(f"Not of the type int")
         
-        if n < 0:
+        if n <= 0:
                     raise ValueError(f"Value less than 0")
         else :
                     res = (1,) * n
@@ -119,7 +119,7 @@ class Vec:
     def uniform(n: int) -> Self:
          if not isinstance(n, int):
                             raise TypeError(f"Not of the type int")
-         if n < 0:
+         if n <= 0:
             raise ValueError(f"Value less than 0")
 
          return Vec(random.uniform(0, 1) for _ in range(n))

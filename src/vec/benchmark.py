@@ -29,7 +29,7 @@ for n in sizes :
 
 
     print(f"\nVector size:  {n}")
-    print(f"Addition:       {add_time / 100 * 1000:.4f} ms")
-    print(f"Subtraction:    {sub_time / 100 * 1000:.4f} ms")
-    print(f"Multiplication: {mul_time / 100 * 1000:.4f} ms")
-    print(f"Norm:           {norm_time / 100 * 1000:.4f} ms")
+    print(f"Addition:       {add_time   / 100 * 1000:.4f} ms")
+    print(f"Subtraction:    {sub_time   / 100 * 1000:.4f} ms")
+    print(f"Multiplication: {mul_time   / 100 * 1000:.4f} ms")
+    print(f"Norm:           {norm_time  / 100 * 1000:.4f} ms")
