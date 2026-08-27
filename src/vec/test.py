@@ -1,5 +1,5 @@
 from vec import Vec
-import sys
+# import sys
 
 if sys.version_info < (3,8):
     sys.exit("Error: This script requires Python 3.8 or higher.")

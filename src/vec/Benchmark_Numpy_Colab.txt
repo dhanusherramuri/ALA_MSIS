@@ -1,0 +1,36 @@
+
+Vector size:  2000
+Addition:       0.0038 ms
+Subtraction:    0.0036 ms
+Multiplication: 0.0037 ms
+Norm:           0.0066 ms
+
+Vector size:  4000
+Addition:       0.0059 ms
+Subtraction:    0.0057 ms
+Multiplication: 0.0056 ms
+Norm:           0.0070 ms
+
+Vector size:  8000
+Addition:       0.0086 ms
+Subtraction:    0.0086 ms
+Multiplication: 0.0081 ms
+Norm:           0.0060 ms
+
+Vector size:  16000
+Addition:       0.0153 ms
+Subtraction:    0.0148 ms
+Multiplication: 0.0145 ms
+Norm:           0.0114 ms
+
+Vector size:  32000
+Addition:       0.0310 ms
+Subtraction:    0.0310 ms
+Multiplication: 0.0322 ms
+Norm:           0.0130 ms
+
+Vector size:  64000
+Addition:       0.0760 ms
+Subtraction:    0.0727 ms
+Multiplication: 0.0705 ms
+Norm:           0.0253 ms
