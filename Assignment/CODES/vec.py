@@ -26,7 +26,7 @@ class Vec :
     
     def std(self) :
         dm = self.demean()
-        print(f"VECTOR INSIDE STD : ",self)
-        print(f"DEMEAN INSIDE STD : ",dm)
+        # print(f"VECTOR INSIDE STD : ",self)
+        # print(f"DEMEAN INSIDE STD : ",dm)
         return math.sqrt(sum(x * x for x in dm.elements)/len(dm))
     
