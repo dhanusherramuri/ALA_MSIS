@@ -22,3 +22,7 @@ course/
 lectures/
 ref/
 src/linalg/
+glove50/
+*.wordvectors
+venv/
+*.npy

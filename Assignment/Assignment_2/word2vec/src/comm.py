@@ -9,12 +9,12 @@ model = api.load('glove-wiki-gigaword-50')
 
 
 import os
-native_path = os.path.expanduser("D:/261100610017/ALA_MSIS/src/word2vec/glove_50_fast.wordvectors")
+native_path = os.path.expanduser("D:/261100610017/ALA_MSIS/Assignment/Assignment_2/word2vec/glove_50_fast.wordvectors")
 model.save(native_path)
-fast_model_path = os.path.expanduser("D:/261100610017/ALA_MSIS/src/word2vec/glove_50_fast.wordvectors")
+fast_model_path = os.path.expanduser("D:/261100610017/ALA_MSIS/Assignment/Assignment_2/word2vec/glove_50_fast.wordvectors")
 model = KeyedVectors.load(fast_model_path, mmap='r')
 model.similarity('university', 'professor')
-# """
+
 
 """
 fasttext-wiki-news-subwords-300 (~958 MB / 300 dimensions):
