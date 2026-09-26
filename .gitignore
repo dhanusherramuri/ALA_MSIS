@@ -26,3 +26,5 @@ glove50/
 *.wordvectors
 venv/
 *.npy
+src/word2vec/glove50/
+Assignment/Assignment_2/word2vec/glove50/
