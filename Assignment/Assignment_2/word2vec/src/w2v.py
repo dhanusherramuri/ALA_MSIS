@@ -18,6 +18,7 @@ class Vec:
                     raise TypeError(f"Scalar must be a number: {type(x)}")
             self.elements = elements
 
+    
     def __add__(self, t: Self) -> Self:
         if not isinstance(t, Vec):
             raise TypeError(f"Expected Vec: {type(t)}")
@@ -125,6 +126,22 @@ class Vec:
 
     # Calculates the Euclidean norm (L2 norm) of the vector.
     # sqrt(e[0]^2 + e[1]^2 + e[2]^2 + ... + e[n-1]^2)
+
+
+    def check (tags : str) -> Self:
+         for tag in tags : 
+              if tag not in model.key_to_index :
+                   raise ValueError(f"Tag not in vocabulary {tag}")
+              vector = model[tag]
+            #   print(model[tag].shape) Was written to ensure the size of each vector is 50 
+            #   print(f"Tag : {tag}")   this was to print the tag which is followed by the vector embeddings 
+            #   print(f"Vector : {vector}") which were real numbers
+            #   print(Vec.tssw(model,vector))
+            #   print(Vec.get_word_vector(model,vector))
+            
+
+
+
     def norm(self) -> float:
         return round(math.sqrt(sum(x * x for x in self.elements)), 5)
         # raise RuntimeError("norm unimpleented")
@@ -176,12 +193,12 @@ class Vec:
 
     def tsdw(model):
         v1 = Vec.get_word_vector(model,"research")
-        v2 = Vec.get_word_vector(model,"internship")
+        v2 = Vec.get_word_vector(model,"innovation")
 
         assert v1 is not None and v2 is not None, "Word vectors retrieval failed."
-        sim = Vec.similarity(model, "research" ,"internship")
+        sim = Vec.similarity(model, "research" ,"innovation")
         assert sim is not None, "Similarity Computation Failed."
-        raw_sim = Vec.csr(model, "research", "internship")
+        raw_sim = Vec.csr(model, "research", "innovation")
         assert abs(sim - raw_sim) < 1e-6, "Computed Similarity Does not match the Model's Similarity"
 
     def tssw(model):
@@ -215,6 +232,10 @@ if __name__ == "__main__":
     w2v_model_path = "../glove50/glove_50_fast.wordvectors"
     model = Vec.load_model(w2v_model_path)
     assert model is not None, "Model Loading failed"
+    tags = ["research","innovation","education","university","students","faculty","campus","engineering","medicine",
+            "technology","curriculum","collaboration","publication","laboratory","scholarship","mentorship","internship",
+            "entrepreneurship","accreditation","alumni"]
+    Vec.check(tags)
     Vec.tsdw(model)
     Vec.tssw(model)
     Vec.tip(model)
