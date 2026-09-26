@@ -27,5 +27,5 @@ glove50/
 venv/
 *.npy
 src/word2vec/glove50/
-src/word2vec/glove50
+src/word2vec/glove50/
 Assignment/Assignment_2/word2vec/glove50/
