@@ -5,7 +5,10 @@ import numpy as np
 import random
 from typing import Self
 from gensim.models import KeyedVectors
-
+'''The source of the words in both of the files has been given here 
+    [01] SOURCE " https://www.linkedin.com/posts/director-mit-manipal-76295721b_mitmanipal-manipalinstituteoftechnology-activity-7500793278980870144-F45- "
+    [02] SOURCE "https://www.linkedin.com/posts/director-mit-manipal-76295721b_mes2026-manipalentrepreneurshipsummit-activity-7431634024386744320-t68P "
+'''
 
 class Vec:
     def __init__(self, src=None) -> Self:
@@ -18,7 +21,19 @@ class Vec:
                     raise TypeError(f"Scalar must be a number: {type(x)}")
             self.elements = elements
 
-    
+    def tlc_pp(txt_path):
+         with open(txt_path,"r",encoding="utf-8") as f:
+              text = f.read()
+         print(f"Number of Tokens Before Preprocessing : {len(text)}")
+         lowercase_text = text.lower().split()
+        #  print(lowercase_text)
+         flt_words = [w for w in lowercase_text if w not in stop_words and  len(w) >= 2 ]
+         clean_text = " ".join(flt_words)
+         print(f"Number of Tokens After preprocessing : {len(clean_text)}")
+         with open(txt_path, "w", encoding="utf-8") as f:
+                f.write(clean_text)        
+
+
     def __add__(self, t: Self) -> Self:
         if not isinstance(t, Vec):
             raise TypeError(f"Expected Vec: {type(t)}")
@@ -229,15 +244,23 @@ class Vec:
         print(round(norm,7))
 
 if __name__ == "__main__":
+    txt_path = "./manipal_tags.txt"
     w2v_model_path = "../glove50/glove_50_fast.wordvectors"
     model = Vec.load_model(w2v_model_path)
     assert model is not None, "Model Loading failed"
     tags = ["research","innovation","education","university","students","faculty","campus","engineering","medicine",
             "technology","curriculum","collaboration","publication","laboratory","scholarship","mentorship","internship",
             "entrepreneurship","accreditation","alumni"]
+    
+    stop_words = ["a", "an", "the", "and", "but", "or", "in", "on", "at", "to", "for", 
+                  "from", "with", "by", "of", "is", "am", "are", "was", "were", "be", 
+                  "i", "you", "he", "she", "it", "we", "they", "this", "that",".",",","!"]
+    
+    
     Vec.check(tags)
     Vec.tsdw(model)
     Vec.tssw(model)
     Vec.tip(model)
     Vec.tms(model, "internship")
     Vec.norm_word(model,"tech")
+    Vec.tlc_pp(txt_path)
