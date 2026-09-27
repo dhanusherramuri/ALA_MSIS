@@ -257,7 +257,7 @@ if __name__ == "__main__":
                   "i", "you", "he", "she", "it", "we", "they", "this", "that",".",",","!"]
     
     
-    Vec.check(tags)
+    # Vec.check(tags)
     Vec.tsdw(model)
     Vec.tssw(model)
     Vec.tip(model)
