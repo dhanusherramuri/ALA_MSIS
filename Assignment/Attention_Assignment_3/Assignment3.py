@@ -12,6 +12,18 @@ D_MID = D_ATTN
 D_OUT = D_E               # output width of MHAttention (Alg. 5)
 
 
+def softmax(A, axis = 0):
+    """softmax(A)[tz, tx] = exp A[tz,tx] / sum_t exp A[t,tx]   (paper eq. 2)."""
+    A = A - np.max(a, axis = axis, keepdims = True)
+    E = np.exp(A)
+    return E/np.sum(E, axis=axis, keepdims=True)
+
+def causal_mask(l_z, l_x):
+    """Mask[tz, tx] = [[tz <= tx]]  (paper eq. 3, unidirectional attention)."""
+
+    tz = np.arange(l_z)[:, None]
+    tx = np.arange(l_x)[None, :]
+    return (tz <= tx).astype(np.int8)
 
 #### ALGORITHM 1  : TOKEN EMBEDDING ###
 
@@ -43,6 +55,32 @@ def layer_norm(e, gamma, beta, eps = 0.0):
      b = beta.reshape((-1,) + (1,) * (e.ndim - 1))
      return ( e - m ) / np.sqrt(v + eps) * g + b
 
+#### ALGORITHM 4 : ATTENTION (SINGLE HEAD) ####
+
+def attention(X,Z,Wq,bq,Wk,bk,Wv,bv, mask = None):
+    """
+    Input : X in R^{d_x x l_x}, Z in R^{d_z x l_z}
+    Params: Wq in R^{d_attn x d_x}, bq in R^{d_attn}
+            Wk in R^{d_attn x d_z}, bk in R^{d_attn}
+            Wv in R^{d_out  x d_z}, bv in R^{d_out}
+    mask  : {0,1}^{l_z x l_x}; None means Mask == 1 (bidirectional / cross-attn)
+    Output: V_tilde in R^{d_out x l_x}
+    """
+    d_attn = Wq.shape[0]
+    l_x, l_z = X.shape[1], Z.shape[1]
+
+    Q = Wq @ X + bq[:, None]
+    K = Wk @ Z + bk[:, None]
+    V = Wv @ Z + bv[:, None]
+    S = K.T @ Q
+
+    if mask is not None : 
+        assert mask.shape == (l_z, l_x)
+        S = np.where(mask.astype(bool), S, -np.inf)
+    
+    return V @ softmax(S / np.sqrt(d_attn), axis = 0)
+
+
 ### TESTS #####
 
 if __name__ == "__main__":
@@ -65,5 +103,12 @@ if __name__ == "__main__":
     Em = rng.normal(size=(D_E, 5))
     cols = np.stack([layer_norm(Em[:, i], g, b) for i in range(5)], axis=1)
     assert np.allclose(layer_norm(Em, g, b), cols)
+
+    #Algorithm 4
+    l = 7
+    X = rng.normal(size=(D_E, l))
+    M = causal_mask(l, l)
+    assert M[0, 0] == 1 and M[1, 0] == 0 and M[0, 1] == 1    # upper-triangular, as in Section 5
+ 
 
     print("TEST PASSED!!")
