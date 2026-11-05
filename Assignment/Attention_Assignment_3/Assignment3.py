@@ -1,3 +1,17 @@
+# ----------------------------------------------------------------------------
+# AI assistance disclosure
+# Tool     : Claude Sonnet 5.5 (Anthropic), claude.ai
+# Date     : 5 November 2026
+# Used for : Initial NumPy implementation of Algorithms 4, 5 and 6 and the
+#            random-parameter test harness (init_mha_params).
+# Author's contribution: Selection of GPT-2 small hyperparameters, the choice
+#            of algorithms, review of the code against Phuong & Hutter (2022),
+#            and verification of the tests (e.g. parameter count 2,362,368).
+# Reference: Phuong & Hutter, "Formal Algorithms for Transformers",
+#            arXiv:2207.09238 (2022).
+# ----------------------------------------------------------------------------
+
+
 import numpy as np
 
 
@@ -14,7 +28,7 @@ D_OUT = D_E               # output width of MHAttention (Alg. 5)
 
 def softmax(A, axis = 0):
     """softmax(A)[tz, tx] = exp A[tz,tx] / sum_t exp A[t,tx]   (paper eq. 2)."""
-    A = A - np.max(a, axis = axis, keepdims = True)
+    A = A - np.max(A, axis = axis, keepdims = True)
     E = np.exp(A)
     return E/np.sum(E, axis=axis, keepdims=True)
 
@@ -81,7 +95,37 @@ def attention(X,Z,Wq,bq,Wk,bk,Wv,bv, mask = None):
     return V @ softmax(S / np.sqrt(d_attn), axis = 0)
 
 
+####ALGORITHM 5 : MHAttention ######
+
+def mh_attention(X, Z, W, mask = None):
+    """
+    Input : X in R^{d_x x l_x}, Z in R^{d_z x l_z}
+    Params: W = {"heads": [ {Wq,bq,Wk,bk,Wv,bv} for h in range(H) ],
+                 "Wo": R^{d_out x H*d_mid}, "bo": R^{d_out}}
+    Output: V_tilde in R^{d_out x l_x}
+    """
+
+    Y = [attention(X, Z, h["Wq"], h["bq"], h["Wk"], h["bk"], h["Wv"], h["bv"], mask)
+         for h in W["heads"]]
+    Y = np.concatenate(Y, axis = 0)
+    return W["Wo"] @ Y + W["bo"][:, None]
+
+#### Random GPT - 2 - small - shaped parameters (for testing)
+
+def init_mha_params(rng, H=N_HEADS, d_x=D_E, d_z=D_E, d_attn=D_ATTN, d_mid=D_MID,
+                    d_out=D_OUT, scale=0.02):
+    heads = [dict(Wq=rng.normal(0, scale, (d_attn, d_x)), bq=rng.normal(0, scale, d_attn),
+                  Wk=rng.normal(0, scale, (d_attn, d_z)), bk=rng.normal(0, scale, d_attn),
+                  Wv=rng.normal(0, scale, (d_mid, d_z)),  bv=rng.normal(0, scale, d_mid))
+             for _ in range(H)]
+    return dict(heads=heads,
+                Wo=rng.normal(0, scale, (d_out, H * d_mid)),
+                bo=rng.normal(0, scale, d_out))
+
 ### TESTS #####
+
+# Self-tests: basic test cases written by the author; refined and extended
+# with AI assistance (Claude Sonnet 5.5, Anthropic).
 
 if __name__ == "__main__":
     rng = np.random.default_rng(0)
@@ -107,8 +151,23 @@ if __name__ == "__main__":
     #Algorithm 4
     l = 7
     X = rng.normal(size=(D_E, l))
+    W = init_mha_params(rng)
     M = causal_mask(l, l)
-    assert M[0, 0] == 1 and M[1, 0] == 0 and M[0, 1] == 1    # upper-triangular, as in Section 5
+    assert M[0, 0] == 1 and M[1, 0] == 0 and M[0, 1] == 1
+
+    #Algorithm 5
+
+    h0 = W["heads"][0]
+    Y0 = attention(X, X, **h0, mask = M)
+    assert Y0.shape == (D_MID, l)
+
+    out = mh_attention(X, X, W, M)
+    assert out.shape == (D_OUT, l)
+
+    #Causality
+    X2 = X.copy(); X2[:, -1] += 10.0
+    out2 = mh_attention(X2, X2, W, M)
+    assert np.allclose(out[:, :-1], out2[:, :-1]) and not np.allclose(out[:, -1], out2[:, -1])
  
 
     print("TEST PASSED!!")
